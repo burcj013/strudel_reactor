@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StrudelMirror } from '@strudel/codemirror';
 import { evalScope } from '@strudel/core';
 import { drawPianoroll } from '@strudel/draw';
@@ -9,6 +9,16 @@ import { getAudioContext, webaudioOutput, registerSynthSounds } from '@strudel/w
 import { registerSoundfonts } from '@strudel/soundfonts';
 import { stranger_tune } from './tunes';
 import console_monkey_patch, { getD3Data } from './console-monkey-patch';
+import DJControls from './components/dj-controls';
+import PlayButtons from './components/play-buttons';
+import PreprocessText from './components/PreprocessText';
+import PageHeader from './components/page-header';
+import Accordion from './components/accordion';
+import CodeOutput from './components/code-output';
+import InstrumentSlider from './components/instrument-slider';
+import ProcessCode from './components/processCode';
+import InstrumentControls from './components/instrument-controls';
+import './components/component-styling.css'
 
 let globalEditor = null;
 
@@ -16,54 +26,64 @@ const handleD3Data = (event) => {
     console.log(event.detail);
 };
 
-export function SetupButtons() {
+// export function SetupButtons() {
 
-    document.getElementById('play').addEventListener('click', () => globalEditor.evaluate());
-    document.getElementById('stop').addEventListener('click', () => globalEditor.stop());
-    document.getElementById('process').addEventListener('click', () => {
-        Proc()
-    }
-    )
-    document.getElementById('process_play').addEventListener('click', () => {
-        if (globalEditor != null) {
-            Proc()
-            globalEditor.evaluate()
-        }
-    }
-    )
-}
+//     document.getElementById('play').addEventListener('click', () => globalEditor.evaluate());
+//     document.getElementById('stop').addEventListener('click', () => globalEditor.stop());
+//     document.getElementById('process').addEventListener('click', () => {
+//         Proc()
+//     }
+//     )
+//     document.getElementById('process_play').addEventListener('click', () => {
+//         if (globalEditor != null) {
+//             Proc()
+//             globalEditor.evaluate()
+//         }
+//     }
+//     )
+// }
 
 
 
-export function ProcAndPlay() {
-    if (globalEditor != null && globalEditor.repl.state.started == true) {
-        console.log(globalEditor)
-        Proc()
-        globalEditor.evaluate();
-    }
-}
+// export function ProcAndPlay() {
+//     if (globalEditor != null && globalEditor.repl.state.started == true) {
+//         console.log(globalEditor)
+//         Proc()
+//         globalEditor.evaluate();
+//     }
+// }
 
-export function Proc() {
+// export function Proc() {
 
-    let proc_text = document.getElementById('proc').value
-    let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
-    ProcessText(proc_text);
-    globalEditor.setCode(proc_text_replaced)
-}
+//     let proc_text = document.getElementById('proc').value
+//     let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
+//     ProcessText(proc_text);
+//     globalEditor.setCode(proc_text_replaced)
+// }
 
-export function ProcessText(match, ...args) {
+// export function ProcessText(match, ...args) {
 
-    let replace = ""
-    if (document.getElementById('flexRadioDefault2').checked) {
-        replace = "_"
-    }
+//     let replace = ""
+//     if (document.getElementById('flexRadioDefault2').checked) {
+//         replace = "_"
+//     }
 
-    return replace
-}
+//     return replace
+// }
 
 export default function StrudelDemo() {
 
-const hasRun = useRef(false);
+    const hasRun = useRef(false);
+
+    const handlePlay = () => {
+        globalEditor.evaluate()
+    }
+
+    const handlePause = () => {
+        globalEditor.stop()
+    }
+
+    const [songText, setSongText] = useState(stranger_tune)
 
 useEffect(() => {
 
@@ -99,53 +119,43 @@ useEffect(() => {
             });
             
         document.getElementById('proc').value = stranger_tune
-        SetupButtons()
-        Proc()
+//      SetupButtons()
+//      Proc()
     }
-
-}, []);
+    globalEditor.setCode(songText);
+}, [songText]);
 
 
 return (
-    <div>
-        <h2>Strudel Demo</h2>
+    <div className='bg-dark'>
+        <PageHeader />
         <main>
 
             <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                        <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
-                        <textarea className="form-control" rows="15" id="proc" ></textarea>
+                <div className="row px-2 py-2">
+                    <div className="col-md-8 pt-3" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
+                        <Accordion component={ <PreprocessText defaultValue={songText} onChange={(e) => setSongText(e.target.value)}/>} text={"Preprocess Text Input"}/>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4 d-flex align-items-center">
 
                         <nav>
-                            <button id="process" className="btn btn-outline-primary">Preprocess</button>
-                            <button id="process_play" className="btn btn-outline-primary">Proc & Play</button>
-                            <br />
-                            <button id="play" className="btn btn-outline-primary">Play</button>
-                            <button id="stop" className="btn btn-outline-primary">Stop</button>
+                            <div>
+                                <PlayButtons onPlay={handlePlay} onPause={handlePause}/>
+                            </div>
                         </nav>
                     </div>
                 </div>
-                <div className="row">
+                <div className="row px-2 py-2">
                     <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                        <div id="editor" />
-                        <div id="output" />
+                        <Accordion component={<CodeOutput/>} text={'Code Output'}/>
+
+                        <InstrumentControls/>
                     </div>
                     <div className="col-md-4">
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onChange={ProcAndPlay} defaultChecked />
-                            <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                p1: ON
-                            </label>
-                        </div>
-                        <div className="form-check">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onChange={ProcAndPlay} />
-                            <label className="form-check-label" htmlFor="flexRadioDefault2">
-                                p1: HUSH
-                            </label>
-                        </div>
+                        <ProcessCode songText={songText} />
+                        <DJControls/>
+                        <InstrumentSlider instrument={"p1"} text={"Volume"}/>
+                        <InstrumentSlider instrument={"p2"} text={"Volume"}/>
                     </div>
                 </div>
             </div>
