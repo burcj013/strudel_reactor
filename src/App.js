@@ -76,7 +76,12 @@ export default function StrudelDemo() {
     const hasRun = useRef(false);
 
     const handlePlay = () => {
+        let outputText = ProcessCode({songText:songText, songVolume:volume})
+        setSongText(outputText)
+        // globalEditor.setCode = outputText
         globalEditor.evaluate()
+        console.log(volume + "in handleplay func")
+        console.log("**************")
     }
 
     const handlePause = () => {
@@ -84,6 +89,16 @@ export default function StrudelDemo() {
     }
 
     const [songText, setSongText] = useState(stranger_tune)
+
+    const [volume, setVolume] = useState(1)
+    const [state, setState] = useState("stop")
+
+    useEffect(() => {
+
+        if (state === "play"){
+            handlePlay();
+        }
+    }, [volume])
 
 useEffect(() => {
 
@@ -140,7 +155,7 @@ return (
 
                         <nav>
                             <div>
-                                <PlayButtons onPlay={handlePlay} onPause={handlePause}/>
+                                <PlayButtons onPlay={() => {setState("play"); handlePlay() }} onPause={() => {setState("stop"); handlePause() }}/>
                             </div>
                         </nav>
                     </div>
@@ -153,7 +168,7 @@ return (
                     </div>
                     <div className="col-md-4">
                         <ProcessCode songText={songText} />
-                        <DJControls/>
+                        <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)}/>
                         <InstrumentSlider instrument={"p1"} text={"Volume"}/>
                         <InstrumentSlider instrument={"p2"} text={"Volume"}/>
                     </div>
