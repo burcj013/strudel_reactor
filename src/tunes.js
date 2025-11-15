@@ -46,6 +46,7 @@ note(pick(basslines, bass))
 .room(0.6)
 .lpf(700)
 .room(0.4)
+.gain(1)
 .postgain(pick(gain_patterns, pattern))
 
 
@@ -56,8 +57,8 @@ note(pick(arpeggiator1, "<0 1 2 3>/2"))
 .adsr("0:0:.5:.1")
 .room(0.6)
 .lpenv(3.3)
+.gain(1)
 .postgain(pick(gain_patterns, pattern))
-
 
 drums:
 stack(
@@ -65,6 +66,7 @@ stack(
   .postgain(6)
   .pcurve(2)
   .pdec(1)
+  .gain(1)
   .struct(pick(drum_structure, pattern)),
 
   s("sh").struct("[x!3 ~!2 x!10 ~]")
