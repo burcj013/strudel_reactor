@@ -145,32 +145,22 @@ return (
     <div className='bg-dark'>
         <PageHeader />
         <main>
-
             <div className="container-fluid">
                 <div className="row px-2 py-2">
-                    <div className="col-md-8 pt-3" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                        <Accordion component={ <PreprocessText defaultValue={songText} onChange={(e) => setSongText(e.target.value)}/>} text={"Preprocess Text Input"}/>
+                    <div className="col-md-8 pt-3">
+                       <Accordion component={ <PreprocessText defaultValue={songText} onChange={(e) => setSongText(e.target.value)}/>} text={"Preprocess Text Input"}/>
+                        <Accordion component={<CodeOutput/>} text={'Code Output'}/>
                     </div>
-                    <div className="col-md-4 d-flex align-items-center">
-
+                    <div className="col-md-4">
                         <nav>
                             <div>
                                 <PlayButtons onPlay={() => {setState("play"); handlePlay() }} onPause={() => {setState("stop"); handlePause() }}/>
+                                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)}/>
+                                <InstrumentSlider instrument={"p1"} text={"Volume"}/>
+                                <InstrumentSlider instrument={"p2"} text={"Volume"}/>
+                            
                             </div>
                         </nav>
-                    </div>
-                </div>
-                <div className="row px-2 py-2">
-                    <div className="col-md-8" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-                        <Accordion component={<CodeOutput/>} text={'Code Output'}/>
-
-                        <InstrumentControls/>
-                    </div>
-                    <div className="col-md-4">
-                        <ProcessCode songText={songText} />
-                        <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)}/>
-                        <InstrumentSlider instrument={"p1"} text={"Volume"}/>
-                        <InstrumentSlider instrument={"p2"} text={"Volume"}/>
                     </div>
                 </div>
             </div>
