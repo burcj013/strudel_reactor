@@ -20,6 +20,7 @@ import ProcessCode from './components/processCode';
 import InstrumentControls from './components/instrument-controls';
 import './components/component-styling.css'
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
+import InstrumentManager from './components/instrument-manager'
 
 let globalEditor = null;
 
@@ -77,10 +78,12 @@ export default function StrudelDemo() {
     const hasRun = useRef(false);
 
     const handlePlay = () => {
+        
         let outputText = ProcessCode({songText:songText, songVolume:volume, cpmValue:cpm})
+
         console.log(outputText)
         setSongText(outputText)
-        //globalEditor.setCode = outputText
+        globalEditor.setCode(outputText)
         globalEditor.evaluate()
         console.log(cpm)
     }
@@ -91,7 +94,7 @@ export default function StrudelDemo() {
 
     const [songText, setSongText] = useState(stranger_tune)
 
-    const [volume, setVolume] = useState(1)
+    const [volume, setVolume] = useState(0.5)
     const [state, setState] = useState("stop")
     const [cpm, setCpm] = useState()
 
@@ -100,7 +103,7 @@ export default function StrudelDemo() {
         if (state === "play"){
             handlePlay();
         }
-    }, [volume], [cpm])
+    }, [volume, cpm])
 
 useEffect(() => {
 
@@ -168,10 +171,7 @@ return (
                             <div>
                                 <PlayButtons onPlay={() => {setState("play"); handlePlay() }} onPause={() => {setState("stop"); handlePause() }}/>
                                 <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)} cpmChange={cpm} onCpmChange={(e) => setCpm(e.target.value)} />
-                                <InstrumentControls songText={songText}/>
-                                {/* <InstrumentSlider instrument={"p1"} text={"Volume"}/>
-                                <InstrumentSlider instrument={"p2"} text={"Volume"}/> */}
-                            
+                                <InstrumentControls songText={songText}/>                      
                             </div>
                         </nav>
                     </div>
