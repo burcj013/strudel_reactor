@@ -19,6 +19,7 @@ import InstrumentSlider from './components/instrument-slider';
 import ProcessCode from './components/processCode';
 import InstrumentControls from './components/instrument-controls';
 import './components/component-styling.css'
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
 
 let globalEditor = null;
 
@@ -76,12 +77,12 @@ export default function StrudelDemo() {
     const hasRun = useRef(false);
 
     const handlePlay = () => {
-        let outputText = ProcessCode({songText:songText, songVolume:volume})
+        let outputText = ProcessCode({songText:songText, songVolume:volume, cpmValue:cpm})
+        console.log(outputText)
         setSongText(outputText)
-        // globalEditor.setCode = outputText
+        //globalEditor.setCode = outputText
         globalEditor.evaluate()
-        console.log(volume + "in handleplay func")
-        console.log("**************")
+        console.log(cpm)
     }
 
     const handlePause = () => {
@@ -92,13 +93,14 @@ export default function StrudelDemo() {
 
     const [volume, setVolume] = useState(1)
     const [state, setState] = useState("stop")
+    const [cpm, setCpm] = useState()
 
     useEffect(() => {
 
         if (state === "play"){
             handlePlay();
         }
-    }, [volume])
+    }, [volume], [cpm])
 
 useEffect(() => {
 
@@ -140,6 +142,15 @@ useEffect(() => {
     globalEditor.setCode(songText);
 }, [songText]);
 
+// const svg = d3.select("svg")
+// let w = svg.node().getBoundingClientRect().width
+// let h = svg.node().getBoundingClientRect().height
+
+// //get data here 
+
+// function buildGraph(dataSet){
+    
+// }
 
 return (
     <div className='bg-dark'>
@@ -150,14 +161,16 @@ return (
                     <div className="col-md-8 pt-3">
                        <Accordion component={ <PreprocessText defaultValue={songText} onChange={(e) => setSongText(e.target.value)}/>} text={"Preprocess Text Input"}/>
                         <Accordion component={<CodeOutput/>} text={'Code Output'}/>
+                  
                     </div>
                     <div className="col-md-4">
                         <nav>
                             <div>
                                 <PlayButtons onPlay={() => {setState("play"); handlePlay() }} onPause={() => {setState("stop"); handlePause() }}/>
-                                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)}/>
-                                <InstrumentSlider instrument={"p1"} text={"Volume"}/>
-                                <InstrumentSlider instrument={"p2"} text={"Volume"}/>
+                                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)} cpmChange={cpm} onCpmChange={(e) => setCpm(e.target.value)} />
+                                <InstrumentControls songText={songText}/>
+                                {/* <InstrumentSlider instrument={"p1"} text={"Volume"}/>
+                                <InstrumentSlider instrument={"p2"} text={"Volume"}/> */}
                             
                             </div>
                         </nav>
