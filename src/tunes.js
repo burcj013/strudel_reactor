@@ -39,7 +39,7 @@ const arpeggiator2 = [
 const pattern = 0
 const bass = 0
 
-bassline:
+bassline: 
 note(pick(basslines, bass))
 .sound("supersaw")
 .postgain(2)
@@ -60,7 +60,7 @@ note(pick(arpeggiator1, "<0 1 2 3>/2"))
 .gain(1)
 .postgain(pick(gain_patterns, pattern))
 
-drums:
+drums: 
 stack(
   s("tech:5")
   .postgain(6)
@@ -95,7 +95,7 @@ stack(
   .speed(0.5)
   .rarely(jux(rev)),
 )
-//Remixed and reproduced from Algorave Dave's code found here: https://www.youtube.com/watch?v=ZCcpWzhekEY
+//Remixed and reproduced from Algorave Dave's code found here:https://www.youtube.com/watch?v=ZCcpWzhekEY
 // all(x => x.gain(mouseX.range(0,1)))
 // all(x => x.log())
 
