@@ -3,6 +3,8 @@ import { BsPlusLg } from "react-icons/bs";
 import { BsDashLg } from "react-icons/bs";
 
 function Accordion ( {component, text} ) {
+
+    // Used for hiding and showing accordions
     const [isHidden, setIsHidden] = useState(false);
 
     const [buttonText, setButtonText] = useState('Hide ' + text);
@@ -13,6 +15,7 @@ function Accordion ( {component, text} ) {
 
     };
 
+    // Update text and icons when clicking the button
     const handleClick = () => {
 
         if (!isHidden){
