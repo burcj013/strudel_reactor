@@ -15,12 +15,10 @@ import PreprocessText from './components/PreprocessText';
 import PageHeader from './components/page-header';
 import Accordion from './components/accordion';
 import CodeOutput from './components/code-output';
-import InstrumentSlider from './components/instrument-slider';
 import ProcessCode from './components/processCode';
 import InstrumentControls from './components/instrument-controls';
 import './components/component-styling.css'
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
-import InstrumentManager from './components/instrument-manager'
 
 let globalEditor = null;
 
@@ -79,10 +77,9 @@ export default function StrudelDemo() {
 
     const handlePlay = () => {
         
-        let outputText = ProcessCode({songText:songText, songVolume:volume, cpmValue:cpm})
-
-        console.log(outputText)
+        let outputText = ProcessCode({songText:songText, songVolume:volume, cpmValue:cpm, instrument:instrumentMute, roomValue:reverb})
         setSongText(outputText)
+        console.log(outputText)
         globalEditor.setCode(outputText)
         globalEditor.evaluate()
         console.log(cpm)
@@ -97,13 +94,15 @@ export default function StrudelDemo() {
     const [volume, setVolume] = useState(0.5)
     const [state, setState] = useState("stop")
     const [cpm, setCpm] = useState()
+    const [instrumentMute, setInstrumentMute] = useState()
+    const [reverb, setReverb] = useState(0.5)
 
     useEffect(() => {
 
         if (state === "play"){
             handlePlay();
         }
-    }, [volume, cpm])
+    }, [volume, cpm, instrumentMute, reverb])
 
 useEffect(() => {
 
@@ -162,7 +161,7 @@ return (
             <div className="container-fluid">
                 <div className="row px-2 py-2">
                     <div className="col-md-8 pt-3">
-                       <Accordion component={ <PreprocessText defaultValue={songText} onChange={(e) => setSongText(e.target.value)}/>} text={"Preprocess Text Input"}/>
+                       <Accordion component={ <PreprocessText songText={songText} onChange={(e) => setSongText(e.target.value)}/>} text={"Preprocess Text Input"}/>
                         <Accordion component={<CodeOutput/>} text={'Code Output'}/>
                   
                     </div>
@@ -170,8 +169,8 @@ return (
                         <nav>
                             <div>
                                 <PlayButtons onPlay={() => {setState("play"); handlePlay() }} onPause={() => {setState("stop"); handlePause() }}/>
-                                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)} cpmChange={cpm} onCpmChange={(e) => setCpm(e.target.value)} />
-                                <InstrumentControls songText={songText}/>                      
+                                <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)} cpmChange={cpm} onCpmChange={(e) => setCpm(e.target.value) } reverbChange={reverb} onReverbChange={(e) => setReverb(e.target.value)}/>
+                                <InstrumentControls songText={songText} muteChange={instrumentMute} onMuteChange={(e) => setInstrumentMute(e.target.value)}/>                      
                             </div>
                         </nav>
                     </div>
