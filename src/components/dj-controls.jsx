@@ -1,6 +1,6 @@
 import './component-styling.css'
 
-function DJControls( {volumeChange, onVolumeChange, cpmChange, onCpmChange} ) {
+function DJControls( {volumeChange, onVolumeChange, cpmChange, onCpmChange, reberbChange, onReverbChange} ) {
     return (
         <>
             <div className="input-group mb-3 pt-5">
@@ -10,6 +10,10 @@ function DJControls( {volumeChange, onVolumeChange, cpmChange, onCpmChange} ) {
              <div className="mb-3">                
                     <label htmlFor="volumeRange" className="form-label">Volume</label>
                     <input type="range" className="form-range slider" min="0" max="1" step="0.1" id="volumeRange" onChange={onVolumeChange}></input>
+                </div>
+            <div className="mb-3">                
+                    <label htmlFor="reverbRange" className="form-label">Reverb</label>
+                    <input type="range" className="form-range slider" min="0" max="1" step="0.1" id="reverbRange" onChange={onReverbChange}></input>
                 </div>
 
             {/* <InstrumentControls/> */}
