@@ -1,5 +1,4 @@
-export const stranger_tune = `setcps(140/60/4)
-
+export const stranger_tune = `setcpm(6)
 samples('github:algorave-dave/samples')
 samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
 samples('https://raw.githubusercontent.com/Mittans/tidal-drum-machines/main/machines/tidal-drum-machines.json')
@@ -39,13 +38,14 @@ const arpeggiator2 = [
 const pattern = 0
 const bass = 0
 
-bassline:
+bassline: 
 note(pick(basslines, bass))
 .sound("supersaw")
 .postgain(2)
 .room(0.6)
 .lpf(700)
 .room(0.4)
+.gain(1)
 .postgain(pick(gain_patterns, pattern))
 
 
@@ -56,15 +56,16 @@ note(pick(arpeggiator1, "<0 1 2 3>/2"))
 .adsr("0:0:.5:.1")
 .room(0.6)
 .lpenv(3.3)
+.gain(1)
 .postgain(pick(gain_patterns, pattern))
 
-
-drums:
+drums: 
 stack(
   s("tech:5")
   .postgain(6)
   .pcurve(2)
   .pdec(1)
+  .gain(1)
   .struct(pick(drum_structure, pattern)),
 
   s("sh").struct("[x!3 ~!2 x!10 ~]")
@@ -93,7 +94,7 @@ stack(
   .speed(0.5)
   .rarely(jux(rev)),
 )
-//Remixed and reproduced from Algorave Dave's code found here: https://www.youtube.com/watch?v=ZCcpWzhekEY
+//Remixed and reproduced from Algorave Dave's code found here:https://www.youtube.com/watch?v=ZCcpWzhekEY
 // all(x => x.gain(mouseX.range(0,1)))
 // all(x => x.log())
 
