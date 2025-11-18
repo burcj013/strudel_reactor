@@ -1,6 +1,8 @@
 import './component-styling.css'
 
 function DJControls( {volumeChange, onVolumeChange, cpmChange, onCpmChange, reberbChange, onReverbChange} ) {
+
+    // Display controls for cpm, reverb and volume
     return (
         <>
             <div className="input-group mb-3 pt-5">
