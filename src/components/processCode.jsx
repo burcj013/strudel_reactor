@@ -1,37 +1,18 @@
 function ProcessCode( {songText, songVolume, cpmValue, roomValue} ) {
 
-    //let instruments = []
-    //const songTextLines = songText.split('\n');
-
-    // let cpmSpecified = false;
-
-    //iterate through songTextLines
-    //check for instruments and add it to list
-    
-    //iterate through instruments
-    //display related settings
-
-    // if (songText!= null && songText.includes("setcpm(")) {
-    //         cpmSpecified = true;
-    //     }
-
-    // if (cpmSpecified){
-    //     return (
-    //         <div class="input-group mb-3">
-    //             <span class="input-group-text bg-secondary border-secondary text-light" id="setCpmLabel">Set CPM</span>
-    //             <input type="text" class="form-control bg-light border-secondary" aria-describedby="setCpmLabel"/>
-    //         </div>
-    //     );
-    // }
-
     let songLines = songText.split('\n')
+
+    // Used to check whether certain things are included in the code
     let gainIndex = -1
     let cpmIndex = -1
     let roomIndex = -1
+
     let i = 0
     let outputText = ""
     let instruments = []
 
+
+    // Iterate through code and check whether code for gain/room/cpm is present
     songLines.forEach(line => {
         if (line.includes("all(x => x.gain(")){
             gainIndex = i
@@ -50,6 +31,7 @@ function ProcessCode( {songText, songVolume, cpmValue, roomValue} ) {
             instruments.push(instrument)
         }
 
+        // Does not work :(
         // if (line.includes(instrument) && line[0] !== "_"){
         //     let muted = "_" + line
         //     songLines[i] = muted
@@ -62,6 +44,7 @@ function ProcessCode( {songText, songVolume, cpmValue, roomValue} ) {
         i++;
     })
 
+    // Edit line if it exists or add a new one if it does not
     if(gainIndex !== -1){
         songLines[gainIndex] = `all(x => x.gain(${songVolume}))`
     }
@@ -76,44 +59,17 @@ function ProcessCode( {songText, songVolume, cpmValue, roomValue} ) {
         songLines.push(`all(x => x.room(${roomValue}))`)
     }
     
-    if(cpmIndex !== -1){
+    // Run if cpm value is not set as to not break strudel
+    if (cpmValue !== undefined){
+        if(cpmIndex !== -1){
         songLines[cpmIndex] = `setcpm(${cpmValue})`
-    }
-    else {
-        songLines.unshift(`setcpm(${cpmValue})`)
+        }
+        else {
+            songLines.unshift(`setcpm(${cpmValue})`)
+        }
     }
 
     outputText = songLines.join('\n')
-    
-    // let regex = /[a-zA-Z0-9_]+:\s*\n[\s\S]+?\r?\n(?=[a-zA-Z0-9_]*[:\/])/gm;
-
-    // let m;
-    // let matches = []
-
-    // while ((m = regex.exec(outputText)) !== null){
-
-    //     if (m.index === regex.lastIndex){
-    //         regex.lastIndex++
-    //     }
-
-    //     m.forEach((match, groupIndex) => {
-    //         matches.push(match)
-    //     })
-    // }
-
-    // let matches2 = matches.map(
-    //     match => match.replaceAll(/(?<!post)gain\(([\d.]+)\)/g, (match, captureGroup) =>
-    //         //need to fix this
-    //         `gain(${captureGroup * songVolume})`
-    //     )
-    // )
-
-    // let matches3 = matches.reduce(
-    //     (text, original, i) => text.replaceAll(original, matches2[i]),
-    //     outputText
-    // )
-    
-    //need to do smth with the instruments, probs loop over them in instrument-controls to display mute switch and vol slider for each
     return outputText
 }
 
