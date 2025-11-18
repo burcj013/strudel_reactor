@@ -26,51 +26,6 @@ const handleD3Data = (event) => {
     console.log(event.detail);
 };
 
-// export function SetupButtons() {
-
-//     document.getElementById('play').addEventListener('click', () => globalEditor.evaluate());
-//     document.getElementById('stop').addEventListener('click', () => globalEditor.stop());
-//     document.getElementById('process').addEventListener('click', () => {
-//         Proc()
-//     }
-//     )
-//     document.getElementById('process_play').addEventListener('click', () => {
-//         if (globalEditor != null) {
-//             Proc()
-//             globalEditor.evaluate()
-//         }
-//     }
-//     )
-// }
-
-
-
-// export function ProcAndPlay() {
-//     if (globalEditor != null && globalEditor.repl.state.started == true) {
-//         console.log(globalEditor)
-//         Proc()
-//         globalEditor.evaluate();
-//     }
-// }
-
-// export function Proc() {
-
-//     let proc_text = document.getElementById('proc').value
-//     let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
-//     ProcessText(proc_text);
-//     globalEditor.setCode(proc_text_replaced)
-// }
-
-// export function ProcessText(match, ...args) {
-
-//     let replace = ""
-//     if (document.getElementById('flexRadioDefault2').checked) {
-//         replace = "_"
-//     }
-
-//     return replace
-// }
-
 export default function StrudelDemo() {
 
     const hasRun = useRef(false);
@@ -144,16 +99,8 @@ useEffect(() => {
     globalEditor.setCode(songText);
 }, [songText]);
 
-// const svg = d3.select("svg")
-// let w = svg.node().getBoundingClientRect().width
-// let h = svg.node().getBoundingClientRect().height
 
-// //get data here 
-
-// function buildGraph(dataSet){
-    
-// }
-
+// Main page code
 return (
     <div className='bg-dark'>
         <PageHeader />
@@ -161,6 +108,7 @@ return (
             <div className="container-fluid">
                 <div className="row px-2 py-2">
                     <div className="col-md-8 pt-3">
+                    {/* //Accordions to display inputs */}
                        <Accordion component={ <PreprocessText songText={songText} onChange={(e) => setSongText(e.target.value)}/>} text={"Preprocess Text Input"}/>
                         <Accordion component={<CodeOutput/>} text={'Code Output'}/>
                   
@@ -168,6 +116,7 @@ return (
                     <div className="col-md-4">
                         <nav>
                             <div>
+                                {/* Components to display controls */}
                                 <PlayButtons onPlay={() => {setState("play"); handlePlay() }} onPause={() => {setState("stop"); handlePause() }}/>
                                 <DJControls volumeChange={volume} onVolumeChange={(e) => setVolume(e.target.value)} cpmChange={cpm} onCpmChange={(e) => setCpm(e.target.value) } reverbChange={reverb} onReverbChange={(e) => setReverb(e.target.value)}/>
                                 <InstrumentControls songText={songText} muteChange={instrumentMute} onMuteChange={(e) => setInstrumentMute(e.target.value)}/>                      
