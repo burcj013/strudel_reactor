@@ -1,9 +1,10 @@
-function InstrumentControls( {songText} ) {
+function InstrumentControls( {songText, muteChange, onMuteChange} ) {
 
-    let output = ``
+    // Split song text into lines
     let songLines = songText.split('\n')
     let instruments = []
 
+    // Make a list of intruments found
     songLines.forEach(line => {
         if (line.includes(": ")){
             let instrument = line.match(/^.*: */)
@@ -11,8 +12,8 @@ function InstrumentControls( {songText} ) {
         }
     })
 
-    //onChange={onVolumeChange} put this back
     return ( 
+        // Return/display elements for each instrument in list
         instruments.map((instrument) => (
             <div key={instrument}>
                 <p className="text-light pt-3 border-top border-secondary">{instrument}</p>
@@ -22,7 +23,7 @@ function InstrumentControls( {songText} ) {
                 </div>
                 <div className="form-check form-switch pb-3">
                     <label className="form-check-label px-2" htmlFor="instrumentSwitch">On/Off</label>
-                    <input className="form-check-input form-switch bg-secondary border-dark" type="checkbox" role="switch" id="instrumentSwitch" />
+                    <input className="form-check-input form-switch bg-secondary border-dark" onChange={onMuteChange} type="checkbox" role="switch" id="instrumentSwitch" />
                 </div>
             </div>
         )
