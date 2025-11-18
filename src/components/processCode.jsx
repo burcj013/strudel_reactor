@@ -1,4 +1,4 @@
-function ProcessCode( {songText, songVolume, cpmValue} ) {
+function ProcessCode( {songText, songVolume, cpmValue, roomValue} ) {
 
     //let instruments = []
     //const songTextLines = songText.split('\n');
@@ -27,6 +27,7 @@ function ProcessCode( {songText, songVolume, cpmValue} ) {
     let songLines = songText.split('\n')
     let gainIndex = -1
     let cpmIndex = -1
+    let roomIndex = -1
     let i = 0
     let outputText = ""
     let instruments = []
@@ -34,6 +35,10 @@ function ProcessCode( {songText, songVolume, cpmValue} ) {
     songLines.forEach(line => {
         if (line.includes("all(x => x.gain(")){
             gainIndex = i
+        }
+
+        if (line.includes("all(x => x.room(")){
+            roomIndex = i
         }
 
         if (line.includes("setcpm(")){
@@ -45,6 +50,15 @@ function ProcessCode( {songText, songVolume, cpmValue} ) {
             instruments.push(instrument)
         }
 
+        // if (line.includes(instrument) && line[0] !== "_"){
+        //     let muted = "_" + line
+        //     songLines[i] = muted
+        // }
+        // else {
+        //     let unmuted = line.substring(1,-1)
+        //     songLines[i] = unmuted
+        // }
+
         i++;
     })
 
@@ -53,6 +67,13 @@ function ProcessCode( {songText, songVolume, cpmValue} ) {
     }
     else { 
         songLines.push(`all(x => x.gain(${songVolume})`)
+    }
+
+    if(roomIndex !== -1){   
+        songLines[roomIndex] = `all(x => x.room(${roomValue}))`
+    }
+    else { 
+        songLines.push(`all(x => x.room(${roomValue}))`)
     }
     
     if(cpmIndex !== -1){
